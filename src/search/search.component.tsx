@@ -1,6 +1,6 @@
-import { useDelayedSearch } from './delayed-search.hook';
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
+import diagramList from '../assets/data/diagram-list.json';
 
 type SearchProps = {
   onSubmit: (value: string) => void;
@@ -38,44 +38,24 @@ const Highlight = styled.span`
 `;
 
 const Search = ({ onSubmit }: SearchProps) => {
-  const [inputValue, setInputValue] = useDelayedSearch(onSubmit);
+  const [inputValue, setInputValue] = useState('');
   const [suggestions, setSuggestions] = useState<{name: string, path: string}[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Static data for demonstration, now with objects
-  const allSuggestions = [
-    { name: 'Suggestion 1', path: '/suggestion-1' },
-    { name: 'Suggestion 2', path: '/suggestion-2' },
-    { name: 'Suggestion 3', path: '/suggestion-3' },
-    { name: 'Suggestion 4', path: '/suggestion-4' },
-    { name: 'Suggestion 5', path: '/suggestion-5' },
-    { name: 'Suggestion 6', path: '/suggestion-6' },
-    { name: 'Suggestion 7', path: '/suggestion-7' },
-    { name: 'Suggestion 8', path: '/suggestion-8' },
-    { name: 'Suggestion 9', path: '/suggestion-9' },
-    { name: 'Suggestion 10', path: '/suggestion-10' }
-  ];
-
   const highlightMatch = (text: string, search: string) => {
     if (!search) return text;
-    const regex = new RegExp(`(${search.split('').join('|')})`, 'gi');
+    const regex = new RegExp(`(${search})`, 'gi');
     const parts = text.split(regex);
-    return parts.map((part, index) => regex.test(part) ? <Highlight key={index}>{part}</Highlight> : part);
+    return parts.map((part, index) => 
+      regex.test(part) ? <Highlight key={index}>{part}</Highlight> : part
+    );
   };
 
   const fetchSuggestions = (value: string) => {
     if (value.length > 0) {
-      let filteredSuggestions = allSuggestions.filter(suggestion =>
+      const filteredSuggestions = diagramList.filter(suggestion =>
         suggestion.name.toLowerCase().includes(value.toLowerCase())
       );
-
-      if (filteredSuggestions.length === 0) {
-        filteredSuggestions = allSuggestions.filter(suggestion =>
-          value.toLowerCase().split('').every(char =>
-            suggestion.name.toLowerCase().includes(char))
-        );
-      }
-
       setSuggestions(filteredSuggestions.slice(0, 5)); // Limit the number of suggestions to 5
     } else {
       setSuggestions([]);
@@ -83,8 +63,9 @@ const Search = ({ onSubmit }: SearchProps) => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-    fetchSuggestions(e.target.value);
+    const value = e.target.value;
+    setInputValue(value);
+    fetchSuggestions(value);
   };
 
   const handleBlur = () => {
@@ -121,7 +102,7 @@ const Search = ({ onSubmit }: SearchProps) => {
         </SuggestionsDropdown>
       )}
     </SearchContainer>
-  )
+  );
 }
 
 export { Search };

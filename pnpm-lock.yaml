@@ -8,6 +8,9 @@ dependencies:
   bootstrap:
     specifier: ^5.3.3
     version: 5.3.3(@popperjs/core@2.11.8)
+  change-case:
+    specifier: ^5.4.4
+    version: 5.4.4
   react:
     specifier: ^18.2.0
     version: 18.3.1
@@ -19,6 +22,9 @@ dependencies:
     version: 6.1.8(react-dom@18.3.1)(react@18.3.1)
 
 devDependencies:
+  '@types/change-case':
+    specifier: ^2.3.1
+    version: 2.3.1
   '@types/react':
     specifier: ^18.2.66
     version: 18.3.0
@@ -613,6 +619,13 @@ packages:
       '@swc/counter': 0.1.3
     dev: true
 
+  /@types/change-case@2.3.1:
+    resolution: {integrity: sha512-HYiGjhmGInNzJjtt6ciXEfl2s8ZQGUQpPiwgWSth1fycE69hXbV/RgWH7MvSq2QPhMBzi4SGhu1vE+cMx1xB8g==}
+    deprecated: This is a stub types definition for change-case (https://github.com/blakeembrey/change-case). change-case provides its own type definitions, so you don't need @types/change-case installed!
+    dependencies:
+      change-case: 5.4.4
+    dev: true
+
   /@types/estree@1.0.5:
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
     dev: true
@@ -885,6 +898,9 @@ packages:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
     dev: true
+
+  /change-case@5.4.4:
+    resolution: {integrity: sha512-HRQyTk2/YPEkt9TnUPbOpr64Uw3KOicFWPVBb+xiHvd6eBx/qPr9xqfBFDT8P2vWsvvz4jbEkfDe71W3VyNu2w==}
 
   /color-convert@2.0.1:
     resolution: {integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==}
