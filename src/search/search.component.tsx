@@ -20,12 +20,15 @@ const SuggestionsDropdown = styled.div`
   border-radius: 0.25rem;
 `;
 
-const SuggestionItem = styled.div`
+const SuggestionLink = styled.a`
+  display: block;
   padding: 8px 16px;
-  cursor: pointer;
   color: #f8f9fa;
-  &:hover {
+  text-decoration: none;
+  &:hover, &:focus {
     background-color: #495057;
+    color: #f8f9fa;
+    text-decoration: none;
   }
 `;
 
@@ -36,13 +39,21 @@ const Highlight = styled.span`
 
 const Search = ({ onSubmit }: SearchProps) => {
   const [inputValue, setInputValue] = useDelayedSearch(onSubmit);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<{name: string, path: string}[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Static data for demonstration, now properly defined within the component
+  // Static data for demonstration, now with objects
   const allSuggestions = [
-    'Suggestion 1', 'Suggestion 2', 'Suggestion 3', 'Suggestion 4', 'Suggestion 5',
-    'Suggestion 6', 'Suggestion 7', 'Suggestion 8', 'Suggestion 9', 'Suggestion 10'
+    { name: 'Suggestion 1', path: '/suggestion-1' },
+    { name: 'Suggestion 2', path: '/suggestion-2' },
+    { name: 'Suggestion 3', path: '/suggestion-3' },
+    { name: 'Suggestion 4', path: '/suggestion-4' },
+    { name: 'Suggestion 5', path: '/suggestion-5' },
+    { name: 'Suggestion 6', path: '/suggestion-6' },
+    { name: 'Suggestion 7', path: '/suggestion-7' },
+    { name: 'Suggestion 8', path: '/suggestion-8' },
+    { name: 'Suggestion 9', path: '/suggestion-9' },
+    { name: 'Suggestion 10', path: '/suggestion-10' }
   ];
 
   const highlightMatch = (text: string, search: string) => {
@@ -55,13 +66,13 @@ const Search = ({ onSubmit }: SearchProps) => {
   const fetchSuggestions = (value: string) => {
     if (value.length > 0) {
       let filteredSuggestions = allSuggestions.filter(suggestion =>
-        suggestion.toLowerCase().includes(value.toLowerCase())
+        suggestion.name.toLowerCase().includes(value.toLowerCase())
       );
 
       if (filteredSuggestions.length === 0) {
         filteredSuggestions = allSuggestions.filter(suggestion =>
           value.toLowerCase().split('').every(char =>
-            suggestion.toLowerCase().includes(char))
+            suggestion.name.toLowerCase().includes(char))
         );
       }
 
@@ -99,13 +110,13 @@ const Search = ({ onSubmit }: SearchProps) => {
       {suggestions.length > 0 && (
         <SuggestionsDropdown>
           {suggestions.map((suggestion, index) => (
-            <SuggestionItem key={index} onClick={() => {
-              setInputValue(suggestion);
+            <SuggestionLink key={index} href={suggestion.path} onClick={() => {
+              setInputValue(suggestion.name);
               setSuggestions([]);
-              onSubmit(suggestion);
+              onSubmit(suggestion.name);
             }}>
-              {highlightMatch(suggestion, inputValue)}
-            </SuggestionItem>
+              {highlightMatch(suggestion.name, inputValue)}
+            </SuggestionLink>
           ))}
         </SuggestionsDropdown>
       )}
