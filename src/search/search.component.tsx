@@ -41,11 +41,20 @@ const Search = ({ onSubmit }: SearchProps) => {
   ];
 
   const fetchSuggestions = (value: string) => {
-    if (value.length > 1) {
-      const filteredSuggestions = allSuggestions.filter(suggestion =>
+    if (value.length > 0) {
+      let filteredSuggestions = allSuggestions.filter(suggestion =>
         suggestion.toLowerCase().includes(value.toLowerCase())
-      ).slice(0, 5); // Limit the number of suggestions to 5
-      setSuggestions(filteredSuggestions);
+      );
+
+      if (filteredSuggestions.length === 0) {
+        // If no direct substring matches found, fallback to unordered character matching
+        filteredSuggestions = allSuggestions.filter(suggestion =>
+          value.toLowerCase().split('').every(char =>
+            suggestion.toLowerCase().includes(char))
+        );
+      }
+
+      setSuggestions(filteredSuggestions.slice(0, 5)); // Limit the number of suggestions to 5
     } else {
       setSuggestions([]);
     }
@@ -83,7 +92,7 @@ const Search = ({ onSubmit }: SearchProps) => {
             <SuggestionItem key={index} onClick={() => {
               setInputValue(suggestion);
               setSuggestions([]);
-              onSubmit(suggestion); // Optional: trigger onSubmit when a suggestion is clicked
+              onSubmit(suggestion); // Optionally trigger onSubmit when a suggestion is clicked
             }}>
               {suggestion}
             </SuggestionItem>
