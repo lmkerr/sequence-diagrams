@@ -29,16 +29,28 @@ const SuggestionItem = styled.div`
   }
 `;
 
+const Highlight = styled.span`
+  color: #0dcaf0; // Bootstrap's "info" color, bright cyan
+  font-weight: bold;
+`;
+
 const Search = ({ onSubmit }: SearchProps) => {
   const [inputValue, setInputValue] = useDelayedSearch(onSubmit);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Static data for demonstration
+  // Static data for demonstration, now properly defined within the component
   const allSuggestions = [
     'Suggestion 1', 'Suggestion 2', 'Suggestion 3', 'Suggestion 4', 'Suggestion 5',
     'Suggestion 6', 'Suggestion 7', 'Suggestion 8', 'Suggestion 9', 'Suggestion 10'
   ];
+
+  const highlightMatch = (text: string, search: string) => {
+    if (!search) return text;
+    const regex = new RegExp(`(${search.split('').join('|')})`, 'gi');
+    const parts = text.split(regex);
+    return parts.map((part, index) => regex.test(part) ? <Highlight key={index}>{part}</Highlight> : part);
+  };
 
   const fetchSuggestions = (value: string) => {
     if (value.length > 0) {
@@ -47,7 +59,6 @@ const Search = ({ onSubmit }: SearchProps) => {
       );
 
       if (filteredSuggestions.length === 0) {
-        // If no direct substring matches found, fallback to unordered character matching
         filteredSuggestions = allSuggestions.filter(suggestion =>
           value.toLowerCase().split('').every(char =>
             suggestion.toLowerCase().includes(char))
@@ -66,7 +77,6 @@ const Search = ({ onSubmit }: SearchProps) => {
   };
 
   const handleBlur = () => {
-    // Delay closing the dropdown to handle click events on suggestions
     setTimeout(() => {
       if (!document.activeElement || document.activeElement !== inputRef.current) {
         setSuggestions([]);
@@ -92,9 +102,9 @@ const Search = ({ onSubmit }: SearchProps) => {
             <SuggestionItem key={index} onClick={() => {
               setInputValue(suggestion);
               setSuggestions([]);
-              onSubmit(suggestion); // Optionally trigger onSubmit when a suggestion is clicked
+              onSubmit(suggestion);
             }}>
-              {suggestion}
+              {highlightMatch(suggestion, inputValue)}
             </SuggestionItem>
           ))}
         </SuggestionsDropdown>
