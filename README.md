@@ -13,3 +13,9 @@ pnpm install
 pnpm build:diagrams
 pnpm dev
 ```
+
+## Build Diagrams
+
+To add your own diagrams, just simply create a `.seqdiag` file anywhere in the `public/diagrams` folder. The build script takes in account for nested folders so you can have any folder structure you want.  For example purposes, I've added a few diagrams for reference.
+
+This application uses the [https://bramp.github.io/js-sequence-diagrams/](js-sequence) library for uml formatting.
