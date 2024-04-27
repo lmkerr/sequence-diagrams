@@ -10,6 +10,10 @@ const Diagram = lazy(() => import('./diagram/diagram.component').then(module => 
 
 const routes: RouteConfig[] = [
     {
+        path: '/',
+        element: <></>
+    },
+    {
         path: '/diagram/:pathString*',
         element: <Diagram />
     }

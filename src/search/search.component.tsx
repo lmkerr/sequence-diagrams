@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import diagramList from '../assets/data/diagram-list.json';
-import { Suggestion } from '../models/suggestion.model';
+import { Suggestion } from '../models/suggestion.model'; // Assuming this is your type definition
 
 type SearchProps = {
   onSubmit: (value: string) => void;
@@ -35,6 +36,7 @@ const SuggestionItem = styled.div`
     color: #f8f9fa;
     text-decoration: none;
   }
+  word-break: break-word;
 `;
 
 const Highlight = styled.span`
@@ -42,11 +44,28 @@ const Highlight = styled.span`
   font-weight: bold;
 `;
 
+const tooltipStyles = `
+  .tooltip-dark .tooltip-inner {
+    background-color: #343a40; /* Dark background */
+    color: #f8f9fa; /* Light text */
+  }
+  .tooltip-dark .tooltip-arrow::before {
+    border-top-color: #343a40; /* Arrow color for top tooltip */
+  }
+`;
+
 const Search = ({ onSubmit }: SearchProps) => {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState<string>('');
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const renderTooltip = (props: any, suggestionPath: string) => (
+    <Tooltip id="button-tooltip" {...props} className="tooltip-dark">
+      {suggestionPath}
+    </Tooltip>
+  );
 
   const highlightMatch = (text: string, search: string) => {
     if (!search) return text;
@@ -90,6 +109,7 @@ const Search = ({ onSubmit }: SearchProps) => {
 
   return (
     <SearchContainer>
+      <style>{tooltipStyles}</style>
       <input
         ref={inputRef}
         className="form-control"
@@ -101,17 +121,30 @@ const Search = ({ onSubmit }: SearchProps) => {
         placeholder="Search for diagrams..."
         autoComplete="off"
       />
-      {suggestions.length > 0 && (
+      {inputValue.length > 0 && (
         <SuggestionsDropdown>
           {suggestions.map((suggestion, index) => (
-            <SuggestionItem key={index} onClick={() => handleSuggestionClick(suggestion)}>
-              {highlightMatch(suggestion.name, inputValue)}
+            <OverlayTrigger
+              key={index}
+              placement="right"
+              delay={{ show: 250, hide: 400 }}
+              overlay={(props) => renderTooltip(props, suggestion.path)}
+            >
+              <SuggestionItem onClick={() => handleSuggestionClick(suggestion)}>
+                {highlightMatch(suggestion.name, inputValue)}
+              </SuggestionItem>
+            </OverlayTrigger>
+
+))}
+          {!suggestions.length && (
+            <SuggestionItem>
+              No suggestions found for <Highlight>{inputValue}</Highlight>
             </SuggestionItem>
-          ))}
+          )}
         </SuggestionsDropdown>
       )}
     </SearchContainer>
   );
-}
+};
 
 export { Search };
