@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import { formatPath } from '../helpers/format-path';
 
 const Diagram = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const pathString = location.pathname.split('/diagram/')[1];
-    const diagramName = location.state?.diagramName;
+    const diagramName = formatPath(location.state?.path);
     const [showModal, setShowModal] = useState(true);
 
     useEffect(() => {

@@ -5,6 +5,7 @@ import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import diagramList from '../assets/data/diagram-list.json';
 import { Suggestion } from '../models/suggestion.model'; // Assuming this is your type definition
+import { formatPath } from '../helpers/format-path';
 
 type SearchProps = {
   onSubmit: (value: string) => void;
@@ -46,6 +47,7 @@ const Highlight = styled.span`
 
 const tooltipStyles = `
   .tooltip-dark .tooltip-inner {
+    padding:10px;
     background-color: #343a40; /* Dark background */
     color: #f8f9fa; /* Light text */
   }
@@ -94,6 +96,8 @@ const Search = ({ onSubmit }: SearchProps) => {
 
   const handleBlur = () => {
     setTimeout(() => {
+      setSuggestions([]);
+      setInputValue('');
       if (!document.activeElement || document.activeElement !== inputRef.current) {
         setSuggestions([]);
       }
@@ -128,7 +132,7 @@ const Search = ({ onSubmit }: SearchProps) => {
               key={index}
               placement="right"
               delay={{ show: 250, hide: 400 }}
-              overlay={(props) => renderTooltip(props, suggestion.path)}
+              overlay={(props) => renderTooltip(props, formatPath(suggestion.path))}
             >
               <SuggestionItem onClick={() => handleSuggestionClick(suggestion)}>
                 {highlightMatch(suggestion.name, inputValue)}
