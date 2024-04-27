@@ -1,5 +1,5 @@
 // App.tsx
-import { Suspense, useState } from 'react';
+import { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import logo from './assets/logo.png';
 import { Search } from './search/search.component';
@@ -8,10 +8,9 @@ import { routes } from './app.routes';
 import './app.css';
 
 const App = () => {
-  const [searchTerm, setSearchTerm] = useState<string>();
 
   const handleSearch = (term: string) => {
-    setSearchTerm(term);
+    console.log(term);
   };
 
   return (

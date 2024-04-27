@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import diagramList from '../assets/data/diagram-list.json';
+import { Suggestion } from '../models/suggestion.model';
 
 type SearchProps = {
   onSubmit: (value: string) => void;
@@ -11,7 +12,7 @@ type SearchProps = {
 const SearchContainer = styled.div`
   position: relative;
   width: 100%;
-  max-width:
+  max-width: 400px;
 `;
 
 const SuggestionsDropdown = styled.div`
@@ -23,11 +24,12 @@ const SuggestionsDropdown = styled.div`
   border-radius: 0.25rem;
 `;
 
-const SuggestionLink = styled(Link)`
+const SuggestionItem = styled.div`
   display: block;
   padding: 8px 16px;
   color: #f8f9fa;
   text-decoration: none;
+  cursor: pointer;
   &:hover, &:focus {
     background-color: #495057;
     color: #f8f9fa;
@@ -42,14 +44,14 @@ const Highlight = styled.span`
 
 const Search = ({ onSubmit }: SearchProps) => {
   const [inputValue, setInputValue] = useState('');
-  const [suggestions, setSuggestions] = useState<{name: string, path: string}[]>([]);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   const highlightMatch = (text: string, search: string) => {
     if (!search) return text;
     const regex = new RegExp(`(${search})`, 'gi');
-    const parts = text.split(regex);
-    return parts.map((part, index) => 
+    return text.split(regex).map((part, index) => 
       regex.test(part) ? <Highlight key={index}>{part}</Highlight> : part
     );
   };
@@ -59,7 +61,7 @@ const Search = ({ onSubmit }: SearchProps) => {
       const filteredSuggestions = diagramList.filter(suggestion =>
         suggestion.name.toLowerCase().includes(value.toLowerCase())
       );
-      setSuggestions(filteredSuggestions.slice(0, 5)); // Limit the number of suggestions to 5
+      setSuggestions(filteredSuggestions.slice(0, 5));
     } else {
       setSuggestions([]);
     }
@@ -79,6 +81,13 @@ const Search = ({ onSubmit }: SearchProps) => {
     }, 150);
   };
 
+  const handleSuggestionClick = (suggestion: Suggestion) => {
+    setInputValue(suggestion.name);
+    setSuggestions([]);
+    onSubmit(suggestion.name);
+    navigate(`/diagram/${suggestion.path}`, { state: { diagramName: suggestion.name, path: suggestion.path } });
+  };
+
   return (
     <SearchContainer>
       <input
@@ -94,13 +103,9 @@ const Search = ({ onSubmit }: SearchProps) => {
       {suggestions.length > 0 && (
         <SuggestionsDropdown>
           {suggestions.map((suggestion, index) => (
-            <SuggestionLink key={index} to={`${suggestion.path}`} onClick={() => {
-              setInputValue(suggestion.name);
-              setSuggestions([]);
-              onSubmit(suggestion.name);
-            }}>
+            <SuggestionItem key={index} onClick={() => handleSuggestionClick(suggestion)}>
               {highlightMatch(suggestion.name, inputValue)}
-            </SuggestionLink>
+            </SuggestionItem>
           ))}
         </SuggestionsDropdown>
       )}
