@@ -85,7 +85,7 @@ const Search = ({ onSubmit }: SearchProps) => {
     setInputValue(suggestion.name);
     setSuggestions([]);
     onSubmit(suggestion.name);
-    navigate(`/diagram/${suggestion.path}`, { state: { diagramName: suggestion.name, path: suggestion.path } });
+    navigate(`/${suggestion.path}`, { state: { diagramName: suggestion.name, path: suggestion.path } });
   };
 
   return (
@@ -99,6 +99,7 @@ const Search = ({ onSubmit }: SearchProps) => {
         onChange={handleInputChange}
         onBlur={handleBlur}
         placeholder="Search for diagrams..."
+        autoComplete="off"
       />
       {suggestions.length > 0 && (
         <SuggestionsDropdown>

@@ -11,8 +11,12 @@ const Diagram = () => {
     const [showModal, setShowModal] = useState(true);
 
     useEffect(() => {
+        if(!diagramName) {
+            console.log('No diagram url provided. Redirecting to home page.');
+            navigate('/');
+        }
         setShowModal(true);
-    }, [pathString]);
+    }, [navigate,diagramName, pathString]);
 
     const handleClose = () => {
         setShowModal(false);
