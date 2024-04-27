@@ -11,6 +11,7 @@ type SearchProps = {
 const SearchContainer = styled.div`
   position: relative;
   width: 100%;
+  max-width:
 `;
 
 const SuggestionsDropdown = styled.div`
