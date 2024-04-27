@@ -21,7 +21,7 @@ function readDirectory(dir, base = '') {
             const formattedName = capitalCase(fileName);
             files.push({
                 name: formattedName,
-                path: relativePath
+                path: '/diagram/' + relativePath
             });
 
             // Log the name and path of the file

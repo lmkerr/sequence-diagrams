@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+
 import diagramList from '../assets/data/diagram-list.json';
 
 type SearchProps = {
@@ -20,7 +22,7 @@ const SuggestionsDropdown = styled.div`
   border-radius: 0.25rem;
 `;
 
-const SuggestionLink = styled.a`
+const SuggestionLink = styled(Link)`
   display: block;
   padding: 8px 16px;
   color: #f8f9fa;
@@ -91,7 +93,7 @@ const Search = ({ onSubmit }: SearchProps) => {
       {suggestions.length > 0 && (
         <SuggestionsDropdown>
           {suggestions.map((suggestion, index) => (
-            <SuggestionLink key={index} href={suggestion.path} onClick={() => {
+            <SuggestionLink key={index} to={`${suggestion.path}`} onClick={() => {
               setInputValue(suggestion.name);
               setSuggestions([]);
               onSubmit(suggestion.name);
