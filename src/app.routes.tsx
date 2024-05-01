@@ -14,7 +14,7 @@ const routes: RouteConfig[] = [
         element: <></>
     },
     {
-        path: '/diagram/:pathString*',
+        path: '/diagram/:pathString/*',
         element: <Diagram />
     }
 ];

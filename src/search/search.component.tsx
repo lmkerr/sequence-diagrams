@@ -104,11 +104,15 @@ const Search = ({ onSubmit }: SearchProps) => {
     }, 150);
   };
 
+  const formatDiagramName = (title: string): string => { 
+    return title.replace('/ Diagram /', '');
+};
+
   const handleSuggestionClick = (suggestion: Suggestion) => {
     setInputValue(suggestion.name);
     setSuggestions([]);
     onSubmit(suggestion.name);
-    navigate(`/${suggestion.path}`, { state: { diagramName: suggestion.name, path: suggestion.path } });
+    navigate(`${suggestion.path}`, { state: { diagramName: formatDiagramName(suggestion.name), path: suggestion.path } });
   };
 
   return (

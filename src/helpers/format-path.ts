@@ -10,7 +10,7 @@ const formatPath = (path: string) => {
         segment.split('-').map(word => 
             word.charAt(0).toUpperCase() + word.slice(1)
         ).join(' ')
-    ).join(' / ');
+    ).join(' / ').replace('/ Diagram / ', '');
 }
 
 export { formatPath }

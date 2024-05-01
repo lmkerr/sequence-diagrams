@@ -7,6 +7,7 @@ import { formatPath } from '../helpers/format-path';
 const Diagram = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const fullPathString = location.pathname.replace('/diagram/', '/diagrams/');
     const pathString = location.pathname.split('/diagram/')[1];
     const diagramName = formatPath(location.state?.path);
     const [showModal, setShowModal] = useState(true);
@@ -31,7 +32,7 @@ const Diagram = () => {
             </Modal.Header>
             <Modal.Body>
                 <div>
-                    Diagram for: {pathString}
+                    Diagram for: {fullPathString}
                 </div>
             </Modal.Body>
             <Modal.Footer>
