@@ -17,7 +17,7 @@ function readDirectory(dir, base = '') {
         if (item.isDirectory()) {
             files = files.concat(readDirectory(join(dir, item.name), relativePath));
         } else {
-            const fileName = item.name.replace('.seqdiag', '').replace(/[_-]/g, ' ');
+            const fileName = item.name.replace('.md', '').replace(/[_-]/g, ' ');
             const formattedName = capitalCase(fileName);
             files.push({
                 name: formattedName,

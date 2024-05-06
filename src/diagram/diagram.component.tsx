@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { formatPath } from '../helpers/format-path';
+import { Mermaid } from './mermaid.component';
 
 const Diagram = () => {
     const location = useLocation();
@@ -34,6 +35,7 @@ const Diagram = () => {
                 <div>
                     Diagram for: {fullPathString}
                 </div>
+                <Mermaid chart={pathString} />
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
