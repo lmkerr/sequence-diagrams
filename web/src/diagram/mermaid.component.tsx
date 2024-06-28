@@ -1,5 +1,6 @@
 import mermaid from "mermaid";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { extractFirstMermaidBlock } from "../helpers/extract-mermaid";
 
 mermaid.initialize({
   startOnLoad: true,
@@ -59,11 +60,24 @@ type MermaidProps = {
 
 const Mermaid = (props: MermaidProps) => {
 
+  let text = '';
+  extractFirstMermaidBlock(props.chart).then((extractedText) => { text = extractedText ?? ''});
+  const ref = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    mermaid.contentLoaded();
-  }, [props.chart]);
-  
-    console.log(props.chart)
+    mermaid.mermaidAPI.initialize({
+      startOnLoad: true,
+      securityLevel: "loose",
+      theme: "forest",
+      logLevel: 5
+    })
+  });
+
+  useEffect(() => {
+    if(ref.current && text !== "") {
+      mermaid.mermaidAPI
+    }
+  })
     return (
         <div className="mermaid">{'diagrams/' + props.chart}</div>
     )
